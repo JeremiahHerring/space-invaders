@@ -10,6 +10,7 @@ from button import Button
 from scoreboard import Scoreboard
 from event import Event
 from start_screen import StartScreen
+from death_screen import DeathScreen
 
 class AlienInvasion:
     # di = {pg.K_RIGHT: Vector(1, 0), pg.K_LEFT: Vector(-1, 0),
@@ -39,10 +40,12 @@ class AlienInvasion:
         self.play_button = Button(self, "Play")
         self.event = Event(self)
 
+        self.death_screen = DeathScreen(self)
+
     def game_over(self):
         # self.restart_game()
-        print("Game over!") 
-        sys.exit()
+        self.game_active = False
+        self.death_screen_active = True
 
     def reset_game(self):
         self.stats.reset_stats()
@@ -51,12 +54,11 @@ class AlienInvasion:
 
         self.ship.reset_ship()
         self.fleet.reset_fleet()
-        pg.mouse.set_visible(False)
+        pg.mouse.set_visible(True)
 
     def restart_game(self):
         self.game_active = False
         self.first = True
-        self.play_button.reset_message("Play again? (q for quit)")
         self.reset_game()
 
     def update_points_texts(self):
@@ -71,8 +73,8 @@ class AlienInvasion:
             self.finished = False
             self.first = True
             self.game_active = False
+            self.death_screen_active = False
 
-            # Show start screen
             start_screen = StartScreen(self)
             start_screen.run()
 
@@ -86,12 +88,19 @@ class AlienInvasion:
                     self.sb.show_score()
                     self.update_points_texts()
 
-                if not self.game_active:
+                elif self.death_screen_active:
+                    result = self.death_screen.run()
+                    if result == "play_again":
+                        self.restart_game()
+                        self.death_screen_active = False
+                    elif result == "quit":
+                        self.finished = True
+                else:
                     self.play_button.draw_button()
-                pg.display.flip()
 
+                pg.display.flip()
                 self.clock.tick(60)
-            sys.exit()
+            pg.quit()
 
 if __name__ == '__main__':
     ai = AlienInvasion()
