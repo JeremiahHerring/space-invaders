@@ -27,7 +27,7 @@ class StartScreen:
 
     def load_high_scores(self):
         try:
-            with open("high_scores.txt", "r") as file:
+            with open("high_score.txt", "r") as file:
                 return [int(score.strip()) for score in file.readlines()]
         except FileNotFoundError:
             return []
@@ -91,7 +91,7 @@ class StartScreen:
 
             self.draw_high_scores()
 
-            back_button = Button(self, "Back", center=(self.screen_rect.centerx, 500))
+            back_button = Button(self, "Back", center=(300, 100))
             back_button.draw_button()
 
             for event in pg.event.get():

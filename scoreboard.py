@@ -61,10 +61,31 @@ class Scoreboard:
             self.ships.add(ship)
 
     def check_high_score(self):
-        """Check to see if there's a new high score."""
+        """Check to see if there's a new high score (prevent duplicates)."""
         if self.stats.score > self.stats.high_score:
             self.stats.high_score = self.stats.score
-            self.prep_high_score()  
+            self.prep_high_score()
+            self.write_high_score()  # Write the new high score to the file
+        elif self.stats.score == self.stats.high_score:
+            print("You've matched the high score, but it won't be updated.")
+
+
+    def write_high_score(self):
+        """Write the high score to a file."""
+        try:
+            with open("high_score.txt", "w") as file:
+                file.write(str(self.stats.high_score))
+        except FileNotFoundError:
+            print("Error: high_score.txt not found.")
+
+    def read_high_score(self):
+        """Read the high score from the file."""
+        try:
+            with open("high_score.txt", "r") as file:
+                self.stats.high_score = int(file.read())
+        except FileNotFoundError:
+            print("Error: high_score.txt not found. Starting with score of 0.")
+            self.stats.high_score = 0
 
     def show_score(self):
         """Draw scores, level, and ships to the screen."""

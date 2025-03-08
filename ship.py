@@ -35,7 +35,7 @@ class Ship(Sprite):
 
         self.is_vulnerable = False
         self.is_vulnerable_timer = 0
-        self.is_vulnerable_interval = 700
+        self.is_vulnerable_interval = 1000
 
     def set_fleet(self, fleet): 
         self.fleet = fleet 
@@ -46,6 +46,7 @@ class Ship(Sprite):
     def reset_ship(self):
         self.lasers.empty()
         self.center_ship()
+        self.v = Vector(0, 0)
 
     def center_ship(self):         
         self.rect.midbottom = self.screen_rect.midbottom
@@ -77,7 +78,7 @@ class Ship(Sprite):
         self.explosion_timer.start()
 
         self.lasers.empty()
-        self.fleet.aliens.empty()
+        #self.fleet.aliens.empty()
 
     def fire_laser(self):
         laser = Laser(self.ai_game) 

@@ -74,10 +74,8 @@ class Fleet(Sprite):
         collisions = pg.sprite.groupcollide(self.ship.lasers, self.aliens, True, False)
 
         if collisions:
-            print(f"Collisions detected: {len(collisions)}")  # Debug print
             for aliens in collisions.values():
                 self.stats.score += self.settings.alien_points * len(aliens)
-                print(f"Score updated: {self.stats.score}")  # Debug print
                 self.sb.prep_score() 
                 self.sb.check_high_score()
                 for alien in aliens:
@@ -105,7 +103,7 @@ class Fleet(Sprite):
                 self.ship.ship_hit()
                 return
 
-        if not self.aliens:
+        if not self.aliens and self.ai_game.game_active:
             self.ship.lasers.empty()
             self.create_fleet()
             self.stats.level += 1

@@ -46,6 +46,7 @@ class AlienInvasion:
         # self.restart_game()
         self.game_active = False
         self.death_screen_active = True
+        pg.mouse.set_visible(True)
 
     def reset_game(self):
         self.stats.reset_stats()
@@ -54,12 +55,18 @@ class AlienInvasion:
 
         self.ship.reset_ship()
         self.fleet.reset_fleet()
-        pg.mouse.set_visible(True)
 
     def restart_game(self):
         self.game_active = False
         self.first = True
-        self.reset_game()
+        self.stats.reset_stats()
+        self.sb.prep_score_level_ships()
+        self.ship.reset_ship()
+        self.fleet.reset_fleet()
+        pg.event.clear()
+        self.death_screen_active = False
+        pg.mouse.set_visible(False)
+        self.game_active = True
 
     def update_points_texts(self):
         current_time = pg.time.get_ticks()
@@ -91,8 +98,8 @@ class AlienInvasion:
                 elif self.death_screen_active:
                     result = self.death_screen.run()
                     if result == "play_again":
-                        self.restart_game()
                         self.death_screen_active = False
+                        self.restart_game()
                     elif result == "quit":
                         self.finished = True
                 else:
