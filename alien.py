@@ -36,7 +36,7 @@ class Alien(Sprite):
 
     def hit(self):
         if not self.is_dying:
-            print('ALIEN HIT! Alien is dying')
+            #print('ALIEN HIT! Alien is dying')
             self.is_dying = True
             self.timer = self.explosion_timer
             self.timer.start()
@@ -53,7 +53,7 @@ class Alien(Sprite):
         if self.is_dying and self.explosion_timer.finished():
             self.is_dying = False
             self.is_dead = True
-            print('Alien is dead')
+            #print('Alien is dead')
             self.kill()
             return
 
@@ -96,7 +96,7 @@ class UFO(Sprite):
 
     def hit(self):
         if not self.is_dying:
-            print("UFO HIT! Displaying random score.")
+            #print("UFO HIT! Displaying random score.")
             self.is_dying = True
             self.ufo_points = randint(500, 5000)
             self.ai_game.stats.score += self.ufo_points
