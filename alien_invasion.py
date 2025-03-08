@@ -44,6 +44,7 @@ class AlienInvasion:
 
     def game_over(self):
         # self.restart_game()
+        self.stats.update_high_score()
         self.game_active = False
         self.death_screen_active = True
         pg.mouse.set_visible(True)
