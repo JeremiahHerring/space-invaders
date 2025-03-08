@@ -33,6 +33,10 @@ class Ship(Sprite):
         self.is_exploding = False
         self.explosion_position = None  
 
+        self.is_vulnerable = False
+        self.is_vulnerable_timer = 0
+        self.is_vulnerable_interval = 1000
+
     def set_fleet(self, fleet): 
         self.fleet = fleet 
 
@@ -42,6 +46,7 @@ class Ship(Sprite):
     def reset_ship(self):
         self.lasers.empty()
         self.center_ship()
+        self.v = Vector(0, 0)
 
     def center_ship(self):         
         self.rect.midbottom = self.screen_rect.midbottom
@@ -55,6 +60,9 @@ class Ship(Sprite):
 
     def ship_hit(self):
         """Handle ship being hit by an alien."""
+        if self.is_vulnerable:
+            return
+        
         self.stats.ships_left -= 1
         print(f"Only {self.stats.ships_left} ships left now")
         
@@ -64,11 +72,13 @@ class Ship(Sprite):
             self.ai_game.game_over()
 
         self.is_exploding = True
+        self.is_vulnerable = True
+        self.is_vulnerable_timer = pg.time.get_ticks()
         self.explosion_position = (self.x, self.y) 
         self.explosion_timer.start()
 
         self.lasers.empty()
-        self.fleet.aliens.empty()
+        #self.fleet.aliens.empty()
 
     def fire_laser(self):
         laser = Laser(self.ai_game) 
@@ -81,6 +91,11 @@ class Ship(Sprite):
         self.firing = False
 
     def update(self):
+        if self.is_vulnerable:
+            current_time = pg.time.get_ticks()
+            if current_time - self.is_vulnerable_timer > self.is_vulnerable_interval:
+                self.is_vulnerable = False
+
         if self.is_exploding:
             if self.explosion_timer.finished():
                 self.is_exploding = False

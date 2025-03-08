@@ -11,7 +11,7 @@ class GameStats:
 
     def load_high_score(self):
         try:
-            with open("high_scores.txt", "r") as file:
+            with open("high_score.txt", "r") as file:
                 high_scores = [int(score.strip()) for score in file.readlines()]
                 if high_scores:
                     return max(high_scores)  
