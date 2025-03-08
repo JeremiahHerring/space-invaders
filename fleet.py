@@ -71,27 +71,24 @@ class Fleet(Sprite):
         return False
 
     def update(self): 
-        collisions = pg.sprite.groupcollide(self.ship.lasers, self.aliens, True, False)
-
-        if collisions:
-            for aliens in collisions.values():
-                self.stats.score += self.settings.alien_points * len(aliens)
-                self.sb.prep_score() 
-                self.sb.check_high_score()
-                for alien in aliens:
+        for laser in self.ship.lasers:
+            for alien in self.aliens:
+                if laser.rect.colliderect(alien.rect):
                     alien.hit()
+                    self.stats.score += self.settings.alien_points
+                    self.sb.prep_score()
+                    self.sb.check_high_score()
+                    laser.kill()  # Remove the laser after hitting
 
-        ufo_collisions = pg.sprite.groupcollide(self.ship.lasers, self.ufos, True, False)
-        
-        if ufo_collisions:
-            self.stats.score += self.settings.ufo_points
-            for ufos in ufo_collisions.values():
-                self.stats.score += self.settings.ufo_points * len(ufos)
-                self.sb.prep_score()
-                self.sb.check_high_score()
-                for ufo in ufos:
+        for laser in self.ship.lasers:
+            for ufo in self.ufos:
+                if laser.rect.colliderect(ufo.rect):
                     ufo.hit()
-        
+                    self.stats.score += self.settings.ufo_points
+                    self.sb.prep_score()
+                    self.sb.check_high_score()
+                    laser.kill()
+                
         if not self.ship.is_vulnerable:
             if pg.sprite.spritecollideany(self.ship, self.aliens):
                 print("Ship hit!")

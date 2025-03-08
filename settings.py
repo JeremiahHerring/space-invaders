@@ -8,10 +8,8 @@ class Settings:
         self.w_h = (self.scr_width, self.scr_height)
 
         # laser settings
-        self.laser_speed = 3.0
-        self.laser_width = 30
-        self.laser_height = 15
-        self.laser_color = RED
+        self.lasers_allowed = 10
+        self.laser_speed = 5.0
 
         self.ship_limit = 3
         self.fleet_drop_speed = 10

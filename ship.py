@@ -10,6 +10,7 @@ class Ship(Sprite):
     def __init__(self, ai_game, v=Vector()):
         super().__init__()
         self.ai_game = ai_game
+        self.settings = ai_game.settings
         self.screen = ai_game.screen
         self.screen_rect = ai_game.screen.get_rect()
         self.stats = ai_game.stats
@@ -25,8 +26,9 @@ class Ship(Sprite):
         self.v = v
         self.lasers = pg.sprite.Group()
         self.firing = False
+        self.last_shot_time = 0
+        self.fire_cooldown = 300
         self.fleet = None
-
 
         self.explosion_images = [pg.image.load(f"images/ship_boom{n}.png") for n in range(3)]
         self.explosion_timer = Timer(images=self.explosion_images, delta=100, loop_continuously=False, running=False)
@@ -81,8 +83,15 @@ class Ship(Sprite):
         #self.fleet.aliens.empty()
 
     def fire_laser(self):
-        laser = Laser(self.ai_game) 
-        self.lasers.add(laser)
+        current_time = pg.time.get_ticks()
+
+        if current_time - self.last_shot_time > self.fire_cooldown:
+            if len(self.lasers) < self.settings.lasers_allowed:
+                left_laser = Laser(self.ai_game, side="left")   
+                right_laser = Laser(self.ai_game, side="right") 
+                self.lasers.add(left_laser, right_laser)  
+                
+                self.last_shot_time = current_time 
         
     def open_fire(self): 
         self.firing = True 
