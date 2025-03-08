@@ -4,7 +4,8 @@ from point import Point
 from laser import Laser 
 from time import sleep
 from pygame.sprite import Sprite
-from timer import Timer  
+from timer import Timer
+
 class Ship(Sprite):
     def __init__(self, ai_game, v=Vector()):
         super().__init__()
@@ -26,14 +27,17 @@ class Ship(Sprite):
         self.firing = False
         self.fleet = None
 
+
         self.explosion_images = [pg.image.load(f"images/ship_boom{n}.png") for n in range(3)]
         self.explosion_timer = Timer(images=self.explosion_images, delta=100, loop_continuously=False, running=False)
         self.is_exploding = False
         self.explosion_position = None  
 
-    def set_fleet(self, fleet): self.fleet = fleet 
+    def set_fleet(self, fleet): 
+        self.fleet = fleet 
 
-    def set_sb(self, sb): self.sb = sb
+    def set_sb(self, sb): 
+        self.sb = sb
 
     def reset_ship(self):
         self.lasers.empty()
@@ -53,9 +57,10 @@ class Ship(Sprite):
         """Handle ship being hit by an alien."""
         self.stats.ships_left -= 1
         print(f"Only {self.stats.ships_left} ships left now")
+        
         self.sb.prep_ships()
         if self.stats.ships_left <= 0:
-            self.stats.update_high_scores()
+            self.stats.update_high_score()
             self.ai_game.game_over()
 
         self.is_exploding = True
@@ -69,9 +74,11 @@ class Ship(Sprite):
         laser = Laser(self.ai_game) 
         self.lasers.add(laser)
         
-    def open_fire(self): self.firing = True 
+    def open_fire(self): 
+        self.firing = True 
 
-    def cease_fire(self): self.firing = False
+    def cease_fire(self): 
+        self.firing = False
 
     def update(self):
         if self.is_exploding:
