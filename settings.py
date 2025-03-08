@@ -25,8 +25,10 @@ class Settings:
         self.ship_speed = 10.0
         self.laser_speed = 2.5
         self.alien_speed = 1.0
+        self.ufo_speed = 3.0
 
         self.alien_points = 50
+        self.ufo_points = 300
 
     def increase_speed(self):
         """Increase speed settings and alien point values."""

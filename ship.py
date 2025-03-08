@@ -4,7 +4,7 @@ from point import Point
 from laser import Laser 
 from time import sleep
 from pygame.sprite import Sprite
-
+from timer import Timer  
 class Ship(Sprite):
     def __init__(self, ai_game, v=Vector()):
         super().__init__()
@@ -14,7 +14,8 @@ class Ship(Sprite):
         self.stats = ai_game.stats
         self.sb = None
 
-        self.image = pg.image.load('images/ship.bmp')
+        self.original_image = pg.image.load('images/ship.png') 
+        self.image = self.original_image  
         self.rect = self.image.get_rect()
         self.rect.midbottom = self.screen_rect.midbottom
         scr_r = self.screen_rect 
@@ -24,6 +25,11 @@ class Ship(Sprite):
         self.lasers = pg.sprite.Group()
         self.firing = False
         self.fleet = None
+
+        self.explosion_images = [pg.image.load(f"images/ship_boom{n}.png") for n in range(3)]
+        self.explosion_timer = Timer(images=self.explosion_images, delta=100, loop_continuously=False, running=False)
+        self.is_exploding = False
+        self.explosion_position = None  
 
     def set_fleet(self, fleet): self.fleet = fleet 
 
@@ -44,19 +50,19 @@ class Ship(Sprite):
         self.y = max(0, min(y, scr_r.height - self.rect.height))
 
     def ship_hit(self):
+        """Handle ship being hit by an alien."""
         self.stats.ships_left -= 1
         print(f"Only {self.stats.ships_left} ships left now")
         self.sb.prep_ships()
         if self.stats.ships_left <= 0:
             self.ai_game.game_over()
 
+        self.is_exploding = True
+        self.explosion_position = (self.x, self.y) 
+        self.explosion_timer.start()
+
         self.lasers.empty()
         self.fleet.aliens.empty()
-
-        self.center_ship()
-        self.fleet.create_fleet()
-
-        sleep(0.5) 
 
     def fire_laser(self):
         laser = Laser(self.ai_game) 
@@ -67,9 +73,20 @@ class Ship(Sprite):
     def cease_fire(self): self.firing = False
 
     def update(self):
-        self.x += self.v.x 
-        self.y += self.v.y
-        self.bound()
+        """Update the ship's position and explosion animation."""
+        if self.is_exploding:
+            if self.explosion_timer.finished():
+                self.is_exploding = False
+                self.explosion_timer.reset()
+                self.image = self.original_image 
+                self.center_ship() 
+            else:
+                self.image = self.explosion_timer.current_image()
+        else:
+            self.x += self.v.x 
+            self.y += self.v.y
+            self.bound()
+
         if self.firing:
             self.fire_laser()
         self.lasers.update()
@@ -81,7 +98,11 @@ class Ship(Sprite):
         self.draw()
 
     def draw(self): 
-        self.rect.x, self.rect.y = self.x, self.y
+        """Draw the ship or explosion."""
+        if self.is_exploding:
+            self.rect.x, self.rect.y = self.explosion_position
+        else:
+            self.rect.x, self.rect.y = self.x, self.y
         self.screen.blit(self.image, self.rect)
 
 def main():

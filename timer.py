@@ -12,12 +12,22 @@ class Timer:
         self.latest = pygame.time.get_ticks()
         self.running = running
 
-    def start(self): self.running = True
+    def start(self): 
+        """Start the timer."""
+        self.running = True
+
+    def reset(self):
+        """Reset the timer to its initial state."""
+        self.index = 0  
+        self.latest = pygame.time.get_ticks() 
+        self.running = False 
 
     def finished(self): 
+        """Check if the timer has finished (for non-looping timers)."""
         return not self.loop_continuously and self.index == len(self.images) - 1
 
     def current_image(self):
+        """Get the current image based on elapsed time."""
         if not self.running: return self.images[self.index] 
 
         now = pygame.time.get_ticks()
