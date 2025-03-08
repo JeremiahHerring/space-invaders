@@ -55,6 +55,7 @@ class Ship(Sprite):
         print(f"Only {self.stats.ships_left} ships left now")
         self.sb.prep_ships()
         if self.stats.ships_left <= 0:
+            self.stats.update_high_scores()
             self.ai_game.game_over()
 
         self.is_exploding = True
@@ -73,7 +74,6 @@ class Ship(Sprite):
     def cease_fire(self): self.firing = False
 
     def update(self):
-        """Update the ship's position and explosion animation."""
         if self.is_exploding:
             if self.explosion_timer.finished():
                 self.is_exploding = False
@@ -98,7 +98,6 @@ class Ship(Sprite):
         self.draw()
 
     def draw(self): 
-        """Draw the ship or explosion."""
         if self.is_exploding:
             self.rect.x, self.rect.y = self.explosion_position
         else:
