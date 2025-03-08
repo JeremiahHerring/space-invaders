@@ -27,7 +27,7 @@ class StartScreen:
 
     def load_high_scores(self):
         try:
-            with open("high_score.txt", "r") as file:
+            with open("high_scores.txt", "r") as file:
                 return [int(score.strip()) for score in file.readlines()]
         except FileNotFoundError:
             return []
@@ -47,7 +47,6 @@ class StartScreen:
             self.screen.blit(points_text, (x + 100, y + i * 100 + 20))
 
     def draw_high_scores(self):
-        """Draw high scores on the screen."""
         font = pg.font.SysFont(None, 48)
         high_scores_text = font.render("High Scores:", True, (255, 255, 255))
         self.screen.blit(high_scores_text, (self.screen_rect.centerx - 100, 150))
@@ -58,7 +57,6 @@ class StartScreen:
             self.screen.blit(score_text, (self.screen_rect.centerx - 100, y + i * 50))
 
     def run(self):
-        """Run the start screen."""
         while True:
             self.screen.fill(self.bg_color)
 
@@ -85,7 +83,6 @@ class StartScreen:
             pg.display.flip()
 
     def show_high_scores(self):
-        """Display the high scores screen."""
         while True:
             self.screen.fill(self.bg_color)
 
