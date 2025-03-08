@@ -93,22 +93,23 @@ class Fleet(Sprite):
                 self.sb.check_high_score()
                 for ufo in ufos:
                     ufo.hit()
+        
+        if not self.ship.is_vulnerable:
+            if pg.sprite.spritecollideany(self.ship, self.aliens):
+                print("Ship hit!")
+                self.ship.ship_hit()
+                return
+
+            if pg.sprite.spritecollideany(self.ship, self.ufos):
+                print("Ship hit by UFO!")
+                self.ship.ship_hit()
+                return
 
         if not self.aliens:
             self.ship.lasers.empty()
             self.create_fleet()
             self.stats.level += 1
             self.sb.prep_level()
-            return
-
-        if pg.sprite.spritecollideany(self.ship, self.aliens):
-            print("Ship hit!")
-            self.ship.ship_hit()
-            return
-        
-        if pg.sprite.spritecollideany(self.ship, self.ufos):
-            print("Ship hit by UFO!")
-            self.ship.ship_hit()
             return
         
         if self.check_bottom():
