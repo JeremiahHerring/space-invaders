@@ -12,6 +12,7 @@ class Fleet(Sprite):
         self.ship = ai_game.ship
         self.aliens = pg.sprite.Group()
         self.ufos = pg.sprite.Group()
+        self.lasers = pg.sprite.Group()
         self.settings = ai_game.settings
         self.stats = ai_game.stats
         self.sb = ai_game.sb

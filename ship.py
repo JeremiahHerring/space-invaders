@@ -117,6 +117,9 @@ class Ship(Sprite):
             self.x += self.v.x 
             self.y += self.v.y
             self.bound()
+        collided_lasers = pg.sprite.spritecollide(self, self.ai_game.fleet.lasers, False)
+        if collided_lasers:
+            self.ship_hit() 
 
         if self.firing:
             self.fire_laser()
@@ -126,6 +129,8 @@ class Ship(Sprite):
                 self.lasers.remove(laser)
         for laser in self.lasers.sprites():
             laser.draw() 
+        for laser in collided_lasers:
+            laser.kill()
         self.draw()
 
     def draw(self): 

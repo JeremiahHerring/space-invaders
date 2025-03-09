@@ -4,6 +4,7 @@ from colors import OFF_WHITE, DARK_GREY
 from settings import Settings
 from ship import Ship
 from vector import Vector
+from alien import Alien
 from fleet import Fleet
 from game_stats import GameStats
 from button import Button
@@ -25,7 +26,6 @@ class AlienInvasion:
         self.stats = GameStats(self)
         self.sb = Scoreboard(self)
         self.points_texts = []
-
         self.ship = Ship(ai_game=self)
         self.fleet = Fleet(ai_game=self)
         self.ship.set_fleet(self.fleet)
