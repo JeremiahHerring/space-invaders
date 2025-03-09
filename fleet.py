@@ -12,7 +12,7 @@ class Fleet(Sprite):
         self.ship = ai_game.ship
         self.aliens = pg.sprite.Group()
         self.ufos = pg.sprite.Group()
-        self.lasers = pg.sprite.Group()
+        self.fleet_lasers = pg.sprite.Group()
         self.settings = ai_game.settings
         self.stats = ai_game.stats
         self.sb = ai_game.sb
@@ -25,8 +25,17 @@ class Fleet(Sprite):
         self.ufo_timer = 0
         self.ufo_interval = randint(500, 800)
 
+    def reset_lasers(self):
+        """Reset the lasers for all aliens in the fleet."""
+
+        for alien in self.aliens:
+            alien.reset_lasers()
+
     def reset_fleet(self):
         self.aliens.empty()
+        self.fleet_lasers.empty()
+        
+
         self.create_fleet()
 
     def create_fleet(self):

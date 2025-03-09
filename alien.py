@@ -37,7 +37,9 @@ class Alien(Sprite):
         
         self.x = float(self.rect.x)
         self.y = float(self.rect.y)
-
+    def reset_lasers(self):
+        """Reset the alien's lasers by emptying the laser group."""
+        self.lasers.empty() 
     def hit(self):
         if not self.is_dying:
             #print('ALIEN HIT! Alien is dying')
@@ -52,7 +54,7 @@ class Alien(Sprite):
         if current_time - self.last_shot_time > self.firing_delay:
             laser = AlienLaser(self.ai_game, self.rect.midtop)  # Use the alien's position for the laser
             self.lasers.add(laser)
-            self.ai_game.fleet.lasers.add(laser)
+            self.ai_game.fleet.fleet_lasers.add(laser)
             self.last_shot_time = current_time 
             
             self.firing_delay = random.randint(0, 30000)

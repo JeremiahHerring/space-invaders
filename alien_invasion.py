@@ -12,6 +12,7 @@ from scoreboard import Scoreboard
 from event import Event
 from start_screen import StartScreen
 from death_screen import DeathScreen
+from barrier import Barriers
 
 class AlienInvasion:
     # di = {pg.K_RIGHT: Vector(1, 0), pg.K_LEFT: Vector(-1, 0),
@@ -30,6 +31,8 @@ class AlienInvasion:
         self.fleet = Fleet(ai_game=self)
         self.ship.set_fleet(self.fleet)
         self.ship.set_sb(self.sb)
+        self.barriers = Barriers(ai_game=self)
+
 
         pg.display.set_caption("Alien Invasion")
         self.bg_color = self.settings.bg_color
@@ -56,6 +59,7 @@ class AlienInvasion:
 
         self.ship.reset_ship()
         self.fleet.reset_fleet()
+        self.fleet.reset_lasers()  
 
     def restart_game(self):
         self.game_active = False
@@ -64,6 +68,8 @@ class AlienInvasion:
         self.sb.prep_score_level_ships()
         self.ship.reset_ship()
         self.fleet.reset_fleet()
+        self.fleet.reset_lasers()  
+
         pg.event.clear()
         self.death_screen_active = False
         pg.mouse.set_visible(False)
@@ -95,6 +101,8 @@ class AlienInvasion:
                     self.fleet.update()
                     self.sb.show_score()
                     self.update_points_texts()
+                    self.barriers.update()
+
 
                 elif self.death_screen_active:
                     result = self.death_screen.run()
