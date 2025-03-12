@@ -84,9 +84,9 @@ class Fleet(Sprite):
             for ufo in self.ufos:
                 if laser.rect.colliderect(ufo.rect):
                     ufo.hit()
-                    self.stats.score += self.settings.ufo_points
-                    self.sb.prep_score()
-                    self.sb.check_high_score()
+                    #self.stats.score += self.settings.ufo_points
+                    #self.sb.prep_score()
+                    #self.sb.check_high_score()
                     laser.kill()
                 
         if not self.ship.is_vulnerable:

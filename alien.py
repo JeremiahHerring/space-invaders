@@ -35,7 +35,7 @@ class Alien(Sprite):
         self.y = float(self.rect.y)
 
     def hit(self):
-        if not self.is_dying:
+        if not self.is_dying and not self.is_dead:
             #print('ALIEN HIT! Alien is dying')
             self.is_dying = True
             self.timer = self.explosion_timer
@@ -95,7 +95,7 @@ class UFO(Sprite):
         self.points_text = None  
 
     def hit(self):
-        if not self.is_dying:
+        if not self.is_dying and not self.is_dead:
             #print("UFO HIT! Displaying random score.")
             self.is_dying = True
             self.ufo_points = randint(500, 5000)
