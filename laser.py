@@ -4,7 +4,6 @@ from random import choice
 
 class Laser(Sprite):
     def __init__(self, ai_game, side="center"):
-        """Initialize the laser at the given position on the ship."""
         super().__init__()
         self.screen = ai_game.screen
         self.settings = ai_game.settings
@@ -27,7 +26,6 @@ class Laser(Sprite):
         self.y = float(self.rect.y)  
 
     def update(self):
-        """Move the laser upward."""
         self.y -= self.settings.laser_speed  
         self.rect.y = self.y  
 
@@ -35,12 +33,10 @@ class Laser(Sprite):
             self.kill()
 
     def draw(self):
-        """Draw the laser on the screen."""
         self.screen.blit(self.image, self.rect)
 
 class AlienLaser(Sprite):
     def __init__(self, ai_game, position, side="center"):
-        """Initialize the laser at the given position on the ship."""
         super().__init__()
         self.screen = ai_game.screen
         self.settings = ai_game.settings
@@ -62,7 +58,6 @@ class AlienLaser(Sprite):
         self.y = float(self.rect.y)  
 
     def update(self):
-        """Move the laser upward."""
         self.y += self.settings.laser_speed  
         self.rect.y = self.y  
 
@@ -70,5 +65,4 @@ class AlienLaser(Sprite):
             self.kill()
 
     def draw(self):
-        """Draw the laser on the screen."""
         self.screen.blit(self.image, self.rect)

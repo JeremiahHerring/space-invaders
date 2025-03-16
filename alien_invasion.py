@@ -72,9 +72,13 @@ class AlienInvasion:
         self.first = True
         self.stats.reset_stats()
         self.sb.prep_score_level_ships()
+        
+        self.fleet.fleet_lasers.empty()  
+        self.ship.lasers.empty()  
+        
         self.ship.reset_ship()
         self.fleet.reset_fleet()
-        self.fleet.reset_lasers()  
+        self.fleet.reset_lasers() 
         self.barriers.reset() 
 
         pg.event.clear()

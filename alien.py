@@ -39,6 +39,7 @@ class Alien(Sprite):
         self.y = float(self.rect.y)
     def reset_lasers(self):
         """Reset the alien's lasers by emptying the laser group."""
+        self.last_shot_time = 0  # Reset the timer for when the alien last fired
         self.lasers.empty() 
     def hit(self):
         if not self.is_dying and not self.is_dead:

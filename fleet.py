@@ -26,7 +26,7 @@ class Fleet(Sprite):
         self.ufo_interval = randint(500, 800)
         self.start_time = pg.time.get_ticks()
     def reset_lasers(self):
-        """Reset the lasers for all aliens in the fleet."""
+        self.fleet_lasers.empty()
 
         for alien in self.aliens:
             alien.reset_lasers()
@@ -39,12 +39,9 @@ class Fleet(Sprite):
         self.settings.alien_speed = self.settings.alien_speed
         self.v.x = self.settings.alien_speed
 
-        
-
         self.create_fleet()
 
     def create_fleet(self):
-        """Creates a fleet of aliens with 6 rows, ensuring proper alignment."""
         alien = Alien(ai_game=self.ai_game, v=self.v)
         self.aliens.empty()
         self.fleet_lasers.empty()
@@ -63,7 +60,6 @@ class Fleet(Sprite):
             self.create_row(y_position, num_columns, alien_type, start_x)
 
     def create_row(self, y, num_columns, alien_type, start_x):
-        """Creates a single row of aliens at a given y position."""
         self.num_aliens = 0
 
         for col in range(num_columns):
@@ -113,9 +109,6 @@ class Fleet(Sprite):
             for ufo in self.ufos:
                 if laser.rect.colliderect(ufo.rect):
                     ufo.hit()
-                    #self.stats.score += self.settings.ufo_points
-                    #self.sb.prep_score()
-                    #self.sb.check_high_score()
                     laser.kill()
 
         if not self.ship.is_vulnerable:
