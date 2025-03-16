@@ -14,25 +14,23 @@ class Laser(Sprite):
                              pg.image.load('other_images/laser_2.png'),
                              pg.image.load('other_images/laser_3.png')]
 
-        self.image = choice(self.laser_images)  # Random laser image
+        self.image = choice(self.laser_images)  
         self.rect = self.image.get_rect()
 
-        # Positioning the laser based on the side parameter
         if side == "left":
-            self.rect.midtop = ai_game.ship.rect.midleft  # Left side of ship
+            self.rect.midtop = ai_game.ship.rect.midleft  
         elif side == "right":
-            self.rect.midtop = ai_game.ship.rect.midright  # Right side of ship
+            self.rect.midtop = ai_game.ship.rect.midright  
         else:
-            self.rect.midtop = ai_game.ship.rect.midtop  # Centered laser
+            self.rect.midtop = ai_game.ship.rect.midtop  
 
-        self.y = float(self.rect.y)  # Store as float for smooth movement
+        self.y = float(self.rect.y)  
 
     def update(self):
         """Move the laser upward."""
-        self.y -= self.settings.laser_speed  # Move up
-        self.rect.y = self.y  # Update position
+        self.y -= self.settings.laser_speed  
+        self.rect.y = self.y  
 
-        # Remove the laser if it moves off-screen
         if self.rect.bottom < 0:
             self.kill()
 
@@ -51,22 +49,22 @@ class AlienLaser(Sprite):
                              pg.image.load('other_images/laser_2.png'),
                              pg.image.load('other_images/laser_3.png')]
 
-        self.image = choice(self.laser_images)  # Random laser image
+        self.image = choice(self.laser_images) 
         self.rect = self.image.get_rect()
 
         if side == "left":
-            self.rect.midtop = (position[0] - self.rect.width // 2, position[1])  # Left side of alien
+            self.rect.midtop = (position[0] - self.rect.width // 2, position[1]) 
         elif side == "right":
-            self.rect.midtop = (position[0] + self.rect.width // 2, position[1])  # Right side of alien
+            self.rect.midtop = (position[0] + self.rect.width // 2, position[1]) 
         else:
             self.rect.midtop = position
 
-        self.y = float(self.rect.y)  # Store as float for smooth movement
+        self.y = float(self.rect.y)  
 
     def update(self):
         """Move the laser upward."""
         self.y += self.settings.laser_speed  
-        self.rect.y = self.y  # Update position
+        self.rect.y = self.y  
 
         if self.rect.top < 0:
             self.kill()

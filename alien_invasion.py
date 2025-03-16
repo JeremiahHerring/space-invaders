@@ -13,6 +13,7 @@ from event import Event
 from start_screen import StartScreen
 from death_screen import DeathScreen
 from barrier import Barriers
+from sound import Sound
 
 class AlienInvasion:
     # di = {pg.K_RIGHT: Vector(1, 0), pg.K_LEFT: Vector(-1, 0),
@@ -32,6 +33,7 @@ class AlienInvasion:
         self.ship.set_fleet(self.fleet)
         self.ship.set_sb(self.sb)
         self.barriers = Barriers(ai_game=self)
+        self.sound = Sound()
 
 
         pg.display.set_caption("Alien Invasion")
@@ -50,16 +52,20 @@ class AlienInvasion:
         self.stats.update_high_score()
         self.game_active = False
         self.death_screen_active = True
+        self.sound.play_gameover()
+
         pg.mouse.set_visible(True)
 
     def reset_game(self):
         self.stats.reset_stats()
         self.sb.prep_score_level_ships()
         self.game_active = True
+        self.sound.play_background()
 
         self.ship.reset_ship()
         self.fleet.reset_fleet()
         self.fleet.reset_lasers()  
+        self.barriers.reset()  
 
     def restart_game(self):
         self.game_active = False
@@ -69,11 +75,13 @@ class AlienInvasion:
         self.ship.reset_ship()
         self.fleet.reset_fleet()
         self.fleet.reset_lasers()  
+        self.barriers.reset() 
 
         pg.event.clear()
         self.death_screen_active = False
         pg.mouse.set_visible(False)
         self.game_active = True
+        self.sound.play_background()
 
     def update_points_texts(self):
         current_time = pg.time.get_ticks()
@@ -88,7 +96,7 @@ class AlienInvasion:
             self.first = True
             self.game_active = False
             self.death_screen_active = False
-
+            self.sound.play_background()
             start_screen = StartScreen(self)
             start_screen.run()
 
@@ -116,6 +124,7 @@ class AlienInvasion:
 
                 pg.display.flip()
                 self.clock.tick(60)
+            self.sound.stop_background()
             pg.quit()
 
 if __name__ == '__main__':

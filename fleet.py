@@ -17,14 +17,14 @@ class Fleet(Sprite):
         self.stats = ai_game.stats
         self.sb = ai_game.sb
         self.v = Vector(self.settings.alien_speed, 0)
-
+        self.aliens_killed = 0 
         self.spacing = 1.2 
         self.margin = 50
         self.create_fleet()
-
+        self.num_aliens = 0
         self.ufo_timer = 0
         self.ufo_interval = randint(500, 800)
-
+        self.start_time = pg.time.get_ticks()
     def reset_lasers(self):
         """Reset the lasers for all aliens in the fleet."""
 
@@ -32,8 +32,13 @@ class Fleet(Sprite):
             alien.reset_lasers()
 
     def reset_fleet(self):
+        self.aliens_killed = 0  # Reset kill counter
         self.aliens.empty()
         self.fleet_lasers.empty()
+        self.settings.initialize_dynamic_settings()
+        self.settings.alien_speed = self.settings.alien_speed
+        self.v.x = self.settings.alien_speed
+
         
 
         self.create_fleet()
@@ -41,6 +46,8 @@ class Fleet(Sprite):
     def create_fleet(self):
         """Creates a fleet of aliens with 6 rows, ensuring proper alignment."""
         alien = Alien(ai_game=self.ai_game, v=self.v)
+        self.aliens.empty()
+        self.fleet_lasers.empty()
         alien_width = alien.rect.width
         alien_height = alien.rect.height
 
@@ -57,6 +64,8 @@ class Fleet(Sprite):
 
     def create_row(self, y, num_columns, alien_type, start_x):
         """Creates a single row of aliens at a given y position."""
+        self.num_aliens = 0
+
         for col in range(num_columns):
             x_position = start_x + col * (Alien.alien_images[0][0].get_width() * self.spacing)
             new_alien = Alien(self.ai_game, v=self.v)
@@ -66,6 +75,7 @@ class Fleet(Sprite):
             new_alien.x = x_position
             new_alien.rect.x = x_position
             self.aliens.add(new_alien)
+            self.num_aliens +=1 
 
     def check_edges(self):
         for alien in self.aliens:
@@ -80,7 +90,8 @@ class Fleet(Sprite):
                 return True
         return False
 
-    def update(self): 
+            
+    def update(self):
         for laser in self.ship.lasers:
             for alien in self.aliens:
                 if laser.rect.colliderect(alien.rect):
@@ -88,7 +99,15 @@ class Fleet(Sprite):
                     self.stats.score += self.settings.alien_points
                     self.sb.prep_score()
                     self.sb.check_high_score()
-                    laser.kill()  # Remove the laser after hitting
+                    laser.kill() 
+                    self.aliens_killed += 1
+                    
+                    if self.aliens_killed % 5 == 0 and self.settings.alien_speed < 3.0:
+                        self.settings.alien_speed += 0.1
+                        self.v.x = self.settings.alien_speed if self.v.x > 0 else -self.settings.alien_speed
+                    
+                    remaining_aliens = len(self.aliens)
+                    print(remaining_aliens)
 
         for laser in self.ship.lasers:
             for ufo in self.ufos:
@@ -98,7 +117,7 @@ class Fleet(Sprite):
                     self.sb.prep_score()
                     self.sb.check_high_score()
                     laser.kill()
-                
+
         if not self.ship.is_vulnerable:
             if pg.sprite.spritecollideany(self.ship, self.aliens):
                 print("Ship hit!")
@@ -116,16 +135,17 @@ class Fleet(Sprite):
             self.stats.level += 1
             self.sb.prep_level()
             return
-        
+
         if self.check_bottom():
             return 
-        
+
         if self.check_edges():
             self.v.x *= -1 
             for alien in self.aliens:
                 alien.v.x = self.v.x
                 alien.y += self.settings.fleet_drop_speed
-            
+
+
         for alien in self.aliens:
             alien.update()
 
@@ -136,6 +156,7 @@ class Fleet(Sprite):
             self.spawn_ufo()
             self.ufo_timer = 0
             self.ufo_interval = randint(500, 800)
+
         
     def spawn_ufo(self):
         new_ufo = UFO(self.ai_game)

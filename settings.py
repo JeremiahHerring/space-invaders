@@ -24,7 +24,7 @@ class Settings:
         self.laser_speed = 2.5
         self.alien_speed = 1.0
         self.ufo_speed = 3.0
-
+        self.max_alien_speed = 3.0  # Add a max speed
         self.alien_points = 50
         self.ufo_points = 300
 
